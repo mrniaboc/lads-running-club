@@ -1,0 +1,165 @@
+<html>
+  <head></head>
+  <body>
+    <!--
+    BEFORE RUNNING:
+    ---------------
+    1. If not already done, enable the Google Sheets API
+       and check the quota for your project at
+       https://console.developers.google.com/apis/api/sheets
+    2. Get access keys for your application. See
+       https://developers.google.com/api-client-library/javascript/start/start-js#get-access-keys-for-your-application
+    3. For additional information on authentication, see
+       https://developers.google.com/sheets/api/quickstart/js#step_2_set_up_the_sample
+    -->
+
+
+
+	<h3>What's your name?</h3>
+
+<!-- This is a wee dropdown selector for choosing names, to avoid idiots entering their own name wrong or in an unexpected format --> 
+	
+	<form>
+	<label for="Runner">Who are you?:</label>
+  	<select name="Runner" id="runnerName">
+	<option disabled selected value> --select-- </option> 
+    	<option value="grant">Grant</option>
+    	<option value="fraser">Fraser</option>
+    	<option value="conaill">Conaill</option>
+    	<option value="robert">Robert</option>
+  	</select>
+	</form>
+
+
+        <h3>How far did you run?</h3>
+
+<!-- This is a free text entry box for entering run distance. At a later point you should figure out how to make this only accept floats with two decimal points, and print an angry error message if anything else is submitted. -->
+
+        <input type="text" id="runnerDistance">
+
+<!-- This is a button for submitting the values and kicking the whole show off! -->
+
+        <button onclick="makeApiCall()">Submit</button>
+
+<!-- This part prints the values on the webpage so Grant can test that nothing totally mental is happening. -->
+
+	<p id="demox"></p>
+
+	<p id="demoy"></p>
+
+<!-- Time for some JavaScript babyyyyyyyyyyyyyy!!!-->
+
+	<script>
+
+
+//This is where I call the Goole Sheets API to append the values that were entered above.   
+
+    function makeApiCall() {
+
+
+//this is where I figure out what fucking day it is
+	
+	var curday = function(sp){
+	today = new Date();
+	var dd = today.getDate();
+	var mm = today.getMonth()+1; //As January is 0.
+	var yyyy = today.getFullYear();
+
+	if(dd<10) dd='0'+dd;
+	if(mm<10) mm='0'+mm;
+	return (dd+sp+mm+sp+yyyy);
+	};
+
+	 
+//Here I'm definining some variables that should hopefully have the values entered above.
+
+		var x = document.getElementById("runnerName").value;
+  		document.getElementById("demox").innerHTML = x;
+		var y = document.getElementById("runnerDistance").value;
+  		document.getElementById("demoy").innerHTML = y;
+
+
+//Here I'm saying "Yo Google! Here's where to put those values."
+
+      var params = {
+        // The ID of the spreadsheet to update.
+        spreadsheetId: '10f8CwE9WQ6X7yzmiFxbIUgRyqhCj479kW6wUpMS9cGE', 
+
+        // The A1 notation of the values to update.
+        range: 'blob test!A2:C100000', 
+
+        // How the input data should be interpreted.
+        valueInputOption: 'USER_ENTERED', 
+      };
+
+
+//This is the actual shit I want to deliver.
+
+      var valueRangeBody = {
+	majorDimension: "ROWS",
+        values: [[x,y,curday('-')]]
+      };
+
+
+//Finaly, we're executing it!
+
+      var request = gapi.client.sheets.spreadsheets.values.append(params, valueRangeBody);
+      request.then(function(response) {
+        // TODO: Change code below to process the `response` object:
+        console.log(response.result);
+      }, function(reason) {
+        console.error('error: ' + reason.result.error.message);
+      });
+    }
+
+
+// This is where I convince the machines that I have the right to do what I'm trying to do.
+
+    function initClient() {
+      var API_KEY = 'AIzaSyA7jnVYpRscTDnoD8njjlAKzSh-LcDqxGk';
+
+      var CLIENT_ID = '288514410430-i8ej7uk2jp20culo0rmigjvhs13ucfjb.apps.googleusercontent.com';
+
+      // TODO: Authorize using one of the following scopes:
+      //   'https://www.googleapis.com/auth/drive'
+      //   'https://www.googleapis.com/auth/drive.file'
+      //   'https://www.googleapis.com/auth/spreadsheets'
+      var SCOPE = 'https://www.googleapis.com/auth/spreadsheets';
+
+      gapi.client.init({
+        'apiKey': API_KEY,
+        'clientId': CLIENT_ID,
+        'scope': SCOPE,
+        'discoveryDocs': ['https://sheets.googleapis.com/$discovery/rest?version=v4'],
+      }).then(function() {
+        gapi.auth2.getAuthInstance().isSignedIn.listen(updateSignInStatus);
+        updateSignInStatus(gapi.auth2.getAuthInstance().isSignedIn.get());
+      });
+    }
+
+    function handleClientLoad() {
+      gapi.load('client:auth2', initClient);
+    }
+
+    function updateSignInStatus(isSignedIn) {
+      if (isSignedIn) {
+        makeApiCall();
+      }
+    }
+
+    function handleSignInClick(event) {
+      gapi.auth2.getAuthInstance().signIn();
+    }
+
+    function handleSignOutClick(event) {
+      gapi.auth2.getAuthInstance().signOut();
+    }
+    </script>
+    <script async defer src="https://apis.google.com/js/api.js"
+      onload="this.onload=function(){};handleClientLoad()"
+      onreadystatechange="if (this.readyState === 'complete') this.onload()">
+    </script>
+    <button id="signin-button" onclick="handleSignInClick()">Sign in</button>
+    <button id="signout-button" onclick="handleSignOutClick()">Sign out</button>
+  </body>
+</html>
