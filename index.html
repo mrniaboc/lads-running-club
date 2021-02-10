@@ -64,66 +64,6 @@
     <button id="signin-button" onclick="handleSignInClick()">Sign in</button>
     <button id="signout-button" onclick="handleSignOutClick()">Sign out</button>
 
-
-	<h3>What's your name?</h3>
-
-<!-- This is a wee dropdown selector for choosing names, to avoid idiots entering their own name wrong or in an unexpected format --> 
-	
-	<form>
-	<label for="Runner"></label>
-  	<select name="Runner" id="runnerName">
-	<option disabled selected value> --select-- </option> 
-    	<option value="Grant">Grant</option>
-    	<option value="Fraser">Fraser</option>
-    	<option value="Conaill">Conaill</option>
-    	<option value="Robert">Robert</option>
-  	</select>
-	</form>
-
-
-        <h3>How far did you run?</h3>
-
-<!-- This is a free text entry box for entering run distance. At a later point you should figure out how to make this only accept floats with two decimal points, and print an angry error message if anything else is submitted. -->
-
-        <input type="text" id="floatRunnerDistance">
-
-<script>
-
-// Restricts input for the given textbox to the given inputFilter.
-function setInputFilter(textbox, inputFilter) {
-  ["input", "keydown", "keyup", "mousedown", "mouseup", "select", "contextmenu", "drop"].forEach(function(event) {
-    textbox.addEventListener(event, function() {
-      if (inputFilter(this.value)) {
-        this.oldValue = this.value;
-        this.oldSelectionStart = this.selectionStart;
-        this.oldSelectionEnd = this.selectionEnd;
-      } else if (this.hasOwnProperty("oldValue")) {
-        this.value = this.oldValue;
-        this.setSelectionRange(this.oldSelectionStart, this.oldSelectionEnd);
-      } else {
-        this.value = "";
-      }
-    });
-  });
-}
-
-// Install input filters.
-setInputFilter(document.getElementById("floatRunnerDistance"), function(value) {
-  return /^-?\d*[.,]?\d*$/.test(value); });
-
-
-</script>
-
-<!-- This is a button for submitting the values and kicking the whole show off! -->
-
-        <button onclick="makeApiCall()">Submit</button>
-
-<!-- This part prints the values on the webpage so Grant can test that nothing totally mental is happening. -->
-
-	<p id="demox"></p>
-
-	<p id="demoy"></p>
-
 <!-- Time for some JavaScript babyyyyyyyyyyyyyy!!!-->
 
 <script>
@@ -190,6 +130,68 @@ setInputFilter(document.getElementById("floatRunnerDistance"), function(value) {
     }
 
 </script>
+
+
+	<h3>What's your name?</h3>
+
+<!-- This is a wee dropdown selector for choosing names, to avoid idiots entering their own name wrong or in an unexpected format --> 
+	
+	<form>
+	<label for="Runner"></label>
+  	<select name="Runner" id="runnerName">
+	<option disabled selected value> --select-- </option> 
+    	<option value="Grant">Grant</option>
+    	<option value="Fraser">Fraser</option>
+    	<option value="Conaill">Conaill</option>
+    	<option value="Robert">Robert</option>
+  	</select>
+	</form>
+
+
+        <h3>How far did you run?</h3>
+
+<!-- This is a free text entry box for entering run distance. At a later point you should figure out how to make this only accept floats with two decimal points, and print an angry error message if anything else is submitted. -->
+
+        <input type="text" id="floatRunnerDistance">
+
+<script>
+
+// Restricts input for the given textbox to the given inputFilter.
+function setInputFilter(textbox, inputFilter) {
+  ["input", "keydown", "keyup", "mousedown", "mouseup", "select", "contextmenu", "drop"].forEach(function(event) {
+    textbox.addEventListener(event, function() {
+      if (inputFilter(this.value)) {
+        this.oldValue = this.value;
+        this.oldSelectionStart = this.selectionStart;
+        this.oldSelectionEnd = this.selectionEnd;
+      } else if (this.hasOwnProperty("oldValue")) {
+        this.value = this.oldValue;
+        this.setSelectionRange(this.oldSelectionStart, this.oldSelectionEnd);
+      } else {
+        this.value = "";
+      }
+    });
+  });
+}
+
+// Install input filters.
+setInputFilter(document.getElementById("floatRunnerDistance"), function(value) {
+  return /^-?\d*[.,]?\d*$/.test(value); });
+
+
+</script>
+
+<!-- This is a button for submitting the values and kicking the whole show off! -->
+
+        <button onclick="makeApiCall()">Submit</button>
+
+<!-- This part prints the values on the webpage so Grant can test that nothing totally mental is happening. -->
+
+	<p id="demox"></p>
+
+	<p id="demoy"></p>
+
+
 
   </body>
 
